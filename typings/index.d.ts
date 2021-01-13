@@ -57,6 +57,7 @@ declare module 'nukejs' {
         ignoreCooldown?: Array<UserResolvable>,
         ignorePerms?: Array<UserResolvable>,
         ignoredInhibitors?: Array<string>,
+        errorOutput: boolean
     }
 
     interface EventLoaderOptions {
