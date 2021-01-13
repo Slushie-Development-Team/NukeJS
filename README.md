@@ -1,3 +1,5 @@
+
+
 <div align="center">
 <h1> NukeJS</h1>
   <br>
@@ -22,3 +24,5 @@ If you found a bug or would like to have a feature added, feel free to open an i
 ### Credits
 Much credits to Drago and Sector Seven
 
+:warning: **This is a modified version of NukeJS - Made by [LostNuke](https://github.com/LostNuke), [Sector Seven](https://github.com/Lovinity) & [Developer Drago](https://github.com/DeveloperVulpo).**\
+If you want to install this version, run `npm install git://github.com/Slushie-Development-Team/NukeJS#compiled.git`. It'll automatically include the compiled TSC files.

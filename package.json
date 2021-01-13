@@ -7,7 +7,7 @@
   "contributors": [
     "DeveloperVulpo (https://github.com/DeveloperVulpo)"
   ],
-  "bundleDependencies": false,
+  "bundleDependencies": [],
   "peerDependencies": {
     "discord.js": "12.*"
   },
