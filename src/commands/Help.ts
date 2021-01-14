@@ -37,16 +37,16 @@ export class Help extends Command {
         let BaseEmbed = new MessageEmbed()
             .setTitle("Commands")
             .setColor(process.env.COLOR || "RANDOM")
-            .setDescription(`**Bot Statistics**\n${client.guilds.cache.size} servers\n${Array.from(client.guilds.cache.values()).reduce((p: number, c: Guild) => c.memberCount + p, 0)} Users\n\nStarted at ${moment(client.readyAt).format(`MMMM Do @ hh:mm a`)}.\n${client.ws.ping.toFixed(2)}ms 🤖 ❤️ => 🔌 Response Time`);
+            .setDescription(`${client.description || ""}\n\nStarted on ${moment(client.readyAt).format(`MMMM Do @ hh:mm a`)}.\n${client.ws.ping.toFixed(2)}ms 🤖 ❤️ => 🔌 Response Time`);
 
         // @ts-ignore
         let commands: Array<Command> = Array.from(client.commands.values());
-        for(let command of commands.slice(0, 20)) {
+        for(let command of commands.slice(0, 6)) {
             BaseEmbed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``)
         }
 
         let msg = await message.channel.send(BaseEmbed)
-        if(commands.length <= 20) return;
+        if(commands.length <= 6) return;
 
         try { Promise.all<MessageReaction>([msg.react('◀️'), msg.react('▶️')]) } catch (error) { throw error; }
         let minimumCommands = 0;
@@ -56,10 +56,10 @@ export class Help extends Command {
                 await reaction.users.remove(user)
             } catch { }
             if (reaction.emoji.name === "▶️") {
-                let cmds: Array<Command> = commands.slice(minimumCommands + 20, minimumCommands + 40);
+                let cmds: Array<Command> = commands.slice(minimumCommands + 6, minimumCommands + 12);
                 if (!cmds[0]) return;
 
-                minimumCommands += 20;
+                minimumCommands += 6;
                 let embed = new MessageEmbed({ ...BaseEmbed, fields: [] });
 
                 for(let command of cmds) {
@@ -70,10 +70,10 @@ export class Help extends Command {
             };
 
             if (reaction.emoji.name === "◀️") {
-                let cmds: Array<Command> = commands.slice(minimumCommands - 40, minimumCommands - 20);
+                let cmds: Array<Command> = commands.slice(minimumCommands - 12, minimumCommands - 6);
                 if (!cmds[0]) return;
 
-                minimumCommands -= 40;
+                minimumCommands -= 12;
                 let embed = new MessageEmbed({ ...BaseEmbed, fields: [] });
 
                 for(let command of cmds) {

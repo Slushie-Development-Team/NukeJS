@@ -46,14 +46,14 @@ class Help extends Command_1.Command {
             let BaseEmbed = new discord_js_1.MessageEmbed()
                 .setTitle("Commands")
                 .setColor(process.env.COLOR || "RANDOM")
-                .setDescription(`**Bot Statistics**\n${client.guilds.cache.size} servers\n${Array.from(client.guilds.cache.values()).reduce((p, c) => c.memberCount + p, 0)} Users\n\nStarted at ${moment(client.readyAt).format(`MMMM Do @ hh:mm a`)}.\n${client.ws.ping.toFixed(2)}ms 🤖 ❤️ => 🔌 Response Time`);
+                .setDescription(`${client.description || ""}\n\nStarted on ${moment(client.readyAt).format(`MMMM Do @ hh:mm a`)}.\n${client.ws.ping.toFixed(2)}ms 🤖 ❤️ => 🔌 Response Time`);
             // @ts-ignore
             let commands = Array.from(client.commands.values());
-            for (let command of commands.slice(0, 20)) {
+            for (let command of commands.slice(0, 6)) {
                 BaseEmbed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
             }
             let msg = yield message.channel.send(BaseEmbed);
-            if (commands.length <= 20)
+            if (commands.length <= 6)
                 return;
             try {
                 Promise.all([msg.react('◀️'), msg.react('▶️')]);
@@ -69,10 +69,10 @@ class Help extends Command_1.Command {
                 }
                 catch (_a) { }
                 if (reaction.emoji.name === "▶️") {
-                    let cmds = commands.slice(minimumCommands + 20, minimumCommands + 40);
+                    let cmds = commands.slice(minimumCommands + 6, minimumCommands + 12);
                     if (!cmds[0])
                         return;
-                    minimumCommands += 20;
+                    minimumCommands += 6;
                     let embed = new discord_js_1.MessageEmbed(Object.assign(Object.assign({}, BaseEmbed), { fields: [] }));
                     for (let command of cmds) {
                         embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
@@ -81,10 +81,10 @@ class Help extends Command_1.Command {
                 }
                 ;
                 if (reaction.emoji.name === "◀️") {
-                    let cmds = commands.slice(minimumCommands - 40, minimumCommands - 20);
+                    let cmds = commands.slice(minimumCommands - 12, minimumCommands - 6);
                     if (!cmds[0])
                         return;
-                    minimumCommands -= 40;
+                    minimumCommands -= 12;
                     let embed = new discord_js_1.MessageEmbed(Object.assign(Object.assign({}, BaseEmbed), { fields: [] }));
                     for (let command of cmds) {
                         embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);

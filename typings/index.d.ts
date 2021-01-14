@@ -28,7 +28,8 @@ declare module 'nukejs' {
         readyMessage?: string,
         owner?: string,
         dev_ids?: Array<string>,
-        builtInCommands?: boolean
+        builtInCommands?: boolean,
+        description?: string
     }
 
     interface CommandOptions {

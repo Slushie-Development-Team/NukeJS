@@ -35,6 +35,7 @@ class Client extends discord.Client {
         this.owner = options.owner || "";
         this.dev_ids = options.dev_ids || [];
         this.builtInCommands = options.builtInCommands || true;
+        this.description = options.description || "";
         if (!this.dev_ids.includes(this.owner) && this.owner != "")
             this.dev_ids.push(this.owner);
         this.on('ready', function () {
