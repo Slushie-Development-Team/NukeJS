@@ -70,7 +70,7 @@ export class Help extends Command {
             };
 
             if (reaction.emoji.name === "◀️") {
-                let cmds: Array<Command> = commands.slice(minimumCommands - 6, minimumCommands - 6);
+                let cmds: Array<Command> = commands.slice(minimumCommands - 6, minimumCommands - 12);
                 if (!cmds[0]) return;
 
                 minimumCommands -= 6;

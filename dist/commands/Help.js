@@ -81,7 +81,7 @@ class Help extends Command_1.Command {
                 }
                 ;
                 if (reaction.emoji.name === "◀️") {
-                    let cmds = commands.slice(minimumCommands - 6, minimumCommands - 6);
+                    let cmds = commands.slice(minimumCommands - 6, minimumCommands - 12);
                     if (!cmds[0])
                         return;
                     minimumCommands -= 6;
