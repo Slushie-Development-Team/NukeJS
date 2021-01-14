@@ -43,7 +43,7 @@ export class Help extends Command {
 
         let commands: Array<Command> = Array.from(client.commands.values());
         for(let command of commands.slice(0, 20)) {
-            embed.addField(command.name, `\`${command.description}\`\nUsage: ${client.prefix}${command.usage || command.name}`)
+            embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``)
         }
 
         return message.channel.send(embed)

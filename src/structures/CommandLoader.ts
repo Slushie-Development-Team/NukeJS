@@ -101,6 +101,7 @@ export class CommandLoader extends Loader {
 
     this.client.on("ready", () => {
       this.client.commands = this.Commands;
+      this.client.prefix = this.prefix;
       this.client.on("message", async message => {
         if (message.partial) await message.fetch();
         this.handle(message)

@@ -52,7 +52,7 @@ class Help extends Command_1.Command {
                 .setColor(process.env.COLOR || "RANDOM");
             let commands = Array.from(client.commands.values());
             for (let command of commands.slice(0, 20)) {
-                embed.addField(command.name, `\`${command.description}\`\nUsage: ${client.prefix}${command.usage || command.name}`);
+                embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
             }
             return message.channel.send(embed);
         });
