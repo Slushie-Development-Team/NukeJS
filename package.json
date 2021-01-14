@@ -15,7 +15,7 @@
     "@types/node": "^14.14.20"
   },
   "scripts": {
-    "build": "tsc && cp -r ./src/commands ./dist/commands && git add ."
+    "build": "tsc && cp -r ./src/commands ./dist && git add ."
   },
   "repository": {
     "type": "git",

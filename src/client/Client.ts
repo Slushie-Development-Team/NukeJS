@@ -58,6 +58,8 @@ export class Client extends discord.Client {
     this.readyMessage = options.readyMessage || 'I have been started with the name {username}';
     this.owner = options.owner || "";
     this.dev_ids = options.dev_ids || [];
+    this.builtInCommands = options.builtInCommands || true;
+    
     if (!this.dev_ids.includes(this.owner) && this.owner != "") this.dev_ids.push(this.owner);
 
     this.on('ready', function () {
