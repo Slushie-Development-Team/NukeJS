@@ -48,7 +48,7 @@ export class Client extends discord.Client {
   public builtInCommands: boolean
   public InhibitorStore: discord.Collection<string, Inhibitor> = new discord.Collection<string, Inhibitor>();
 
-  public commands: discord.Collection<string, object> = new discord.Collection();
+  public commands: discord.Collection<string, Command> = new discord.Collection();
   public events: discord.Collection<string, object> = new discord.Collection();;
 
   constructor(options: NukeClientOptions) {
@@ -59,7 +59,7 @@ export class Client extends discord.Client {
     this.owner = options.owner || "";
     this.dev_ids = options.dev_ids || [];
     this.builtInCommands = options.builtInCommands || true;
-    
+
     if (!this.dev_ids.includes(this.owner) && this.owner != "") this.dev_ids.push(this.owner);
 
     this.on('ready', function () {

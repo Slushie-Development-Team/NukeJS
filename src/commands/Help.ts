@@ -20,7 +20,9 @@
  */
 
 import { Command } from "../types/Command";
-import { MessageEmbed } from "discord.js";
+import { Guild, Message, MessageEmbed, MessageReaction } from "discord.js";
+import * as moment from "moment";
+import { Client } from "../client/Client";
 
 export class Help extends Command {
     constructor() {
@@ -31,21 +33,55 @@ export class Help extends Command {
         });
     }
 
-    /**
-     * @param {import("discord.js").Message} message
-     * @param {Array<string>} args
-     * @param {import("../client/Client").Client} client
-     */
-    async run(message, args, client) {
-        let embed = new MessageEmbed()
+    async run(message: Message, args: Array<string>, client: Client) {
+        let BaseEmbed = new MessageEmbed()
             .setTitle("Commands")
-            .setColor(process.env.COLOR || "RANDOM");
+            .setColor(process.env.COLOR || "RANDOM")
+            .setDescription(`**Bot Statistics**\n${client.guilds.cache.size} servers\n${Array.from(client.guilds.cache.values()).reduce((p: number, c: Guild) => c.memberCount + p, 0)} Users\n\nStarted at ${moment(client.readyAt).format(`MMMM Do @ hh:mm a`)}.\n${client.ws.ping.toFixed(2)}ms 🤖 ❤️ => 🔌 Response Time`);
 
+        // @ts-ignore
         let commands: Array<Command> = Array.from(client.commands.values());
         for(let command of commands.slice(0, 20)) {
-            embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``)
+            BaseEmbed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``)
         }
 
-        return message.channel.send(embed)
+        let msg = await message.channel.send(BaseEmbed)
+        if(commands.length <= 20) return;
+
+        try { Promise.all<MessageReaction>([msg.react('◀️'), msg.react('▶️')]) } catch (error) { throw error; }
+        let minimumCommands = 0;
+        msg.createReactionCollector((reaction, user) => user.id === message.author.id && ["◀️", "▶️"].includes(reaction.emoji.name))
+        .on("collect", async (reaction, user) => {
+            try {
+                await reaction.users.remove(user)
+            } catch { }
+            if (reaction.emoji.name === "▶️") {
+                let cmds: Array<Command> = commands.slice(minimumCommands + 20, minimumCommands + 40);
+                if (!cmds[0]) return;
+
+                minimumCommands += 20;
+                let embed = new MessageEmbed({ ...BaseEmbed, fields: [] });
+
+                for(let command of cmds) {
+                    embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``)
+                }
+
+                return await msg.edit(embed)
+            };
+
+            if (reaction.emoji.name === "◀️") {
+                let cmds: Array<Command> = commands.slice(minimumCommands - 40, minimumCommands - 20);
+                if (!cmds[0]) return;
+
+                minimumCommands -= 40;
+                let embed = new MessageEmbed({ ...BaseEmbed, fields: [] });
+
+                for(let command of cmds) {
+                    embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``)
+                }
+
+                return await msg.edit(embed)
+            }
+        })
     }
 }

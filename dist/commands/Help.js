@@ -32,6 +32,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Help = void 0;
 const Command_1 = require("../types/Command");
 const discord_js_1 = require("discord.js");
+const moment = require("moment");
 class Help extends Command_1.Command {
     constructor() {
         super('help', {
@@ -40,21 +41,57 @@ class Help extends Command_1.Command {
             usage: "help"
         });
     }
-    /**
-     * @param {import("discord.js").Message} message
-     * @param {Array<string>} args
-     * @param {import("../client/Client").Client} client
-     */
     run(message, args, client) {
         return __awaiter(this, void 0, void 0, function* () {
-            let embed = new discord_js_1.MessageEmbed()
+            let BaseEmbed = new discord_js_1.MessageEmbed()
                 .setTitle("Commands")
-                .setColor(process.env.COLOR || "RANDOM");
+                .setColor(process.env.COLOR || "RANDOM")
+                .setDescription(`**Bot Statistics**\n${client.guilds.cache.size} servers\n${Array.from(client.guilds.cache.values()).reduce((p, c) => c.memberCount + p, 0)} Users\n\nStarted at ${moment(client.readyAt).format(`MMMM Do @ hh:mm a`)}.\n${client.ws.ping.toFixed(2)}ms 🤖 ❤️ => 🔌 Response Time`);
+            // @ts-ignore
             let commands = Array.from(client.commands.values());
             for (let command of commands.slice(0, 20)) {
-                embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
+                BaseEmbed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
             }
-            return message.channel.send(embed);
+            let msg = yield message.channel.send(BaseEmbed);
+            if (commands.length <= 20)
+                return;
+            try {
+                Promise.all([msg.react('◀️'), msg.react('▶️')]);
+            }
+            catch (error) {
+                throw error;
+            }
+            let minimumCommands = 0;
+            msg.createReactionCollector((reaction, user) => user.id === message.author.id && ["◀️", "▶️"].includes(reaction.emoji.name))
+                .on("collect", (reaction, user) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    yield reaction.users.remove(user);
+                }
+                catch (_a) { }
+                if (reaction.emoji.name === "▶️") {
+                    let cmds = commands.slice(minimumCommands + 20, minimumCommands + 40);
+                    if (!cmds[0])
+                        return;
+                    minimumCommands += 20;
+                    let embed = new discord_js_1.MessageEmbed(Object.assign(Object.assign({}, BaseEmbed), { fields: [] }));
+                    for (let command of cmds) {
+                        embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
+                    }
+                    return yield msg.edit(embed);
+                }
+                ;
+                if (reaction.emoji.name === "◀️") {
+                    let cmds = commands.slice(minimumCommands - 40, minimumCommands - 20);
+                    if (!cmds[0])
+                        return;
+                    minimumCommands -= 40;
+                    let embed = new discord_js_1.MessageEmbed(Object.assign(Object.assign({}, BaseEmbed), { fields: [] }));
+                    for (let command of cmds) {
+                        embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
+                    }
+                    return yield msg.edit(embed);
+                }
+            }));
         });
     }
 }
