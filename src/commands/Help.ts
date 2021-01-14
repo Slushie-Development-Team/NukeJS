@@ -70,10 +70,10 @@ export class Help extends Command {
             };
 
             if (reaction.emoji.name === "◀️") {
-                let cmds: Array<Command> = commands.slice(minimumCommands - 12, minimumCommands - 6);
+                let cmds: Array<Command> = commands.slice(minimumCommands - 6, minimumCommands - 6);
                 if (!cmds[0]) return;
 
-                minimumCommands -= 12;
+                minimumCommands -= 6;
                 let embed = new MessageEmbed({ ...BaseEmbed, fields: [] });
 
                 for(let command of cmds) {

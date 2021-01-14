@@ -81,10 +81,10 @@ class Help extends Command_1.Command {
                 }
                 ;
                 if (reaction.emoji.name === "◀️") {
-                    let cmds = commands.slice(minimumCommands - 12, minimumCommands - 6);
+                    let cmds = commands.slice(minimumCommands - 6, minimumCommands - 6);
                     if (!cmds[0])
                         return;
-                    minimumCommands -= 12;
+                    minimumCommands -= 6;
                     let embed = new discord_js_1.MessageEmbed(Object.assign(Object.assign({}, BaseEmbed), { fields: [] }));
                     for (let command of cmds) {
                         embed.addField(command.name, `${command.description}\n\`Usage: ${client.prefix}${command.usage || command.name}\``);
