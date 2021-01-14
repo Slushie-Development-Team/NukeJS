@@ -31,6 +31,7 @@ exports.CommandLoader = void 0;
  *   along with NukeJS.  If not, see <https://www.gnu.org/licenses/>.
  */
 const discord_js_1 = require("discord.js");
+const fs = require("fs");
 const NukeLogger_1 = require("../utils/NukeLogger");
 const Loader_1 = require("./Loader");
 const discord_js_2 = require("discord.js");
@@ -63,6 +64,8 @@ class CommandLoader extends Loader_1.Loader {
         console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++`));
         console.log(chalk.gray(`#         Loading commands with prefix: ${this.prefix}           #`));
         console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++`));
+        if (this.client.builtInCommands)
+            this.privateFetch();
         this.fetchAll();
         console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n`));
         this.client.on("ready", () => {
@@ -85,12 +88,6 @@ class CommandLoader extends Loader_1.Loader {
         });
     }
     register(file, path, category) {
-        if (this.client.builtInCommands) {
-            const command = new (require('../commands/'))('help');
-            this.Commands.set(command.name, command);
-            this.Logger.LOADED_COMMAND(command);
-            this.emit("loaded", { path: command.file });
-        }
         try {
             const command = new (require(path))(file);
             if (this.folderCategory && category !== undefined)
@@ -219,6 +216,14 @@ class CommandLoader extends Loader_1.Loader {
                 this.emit("error", { command: cmd.name, error: error, message: message });
             }
         });
+    }
+    privateFetch() {
+        for (let file of fs.readdirSync(__dirname + '/../commands')) {
+            const command = new (require(__dirname + '/../commands/'))(file.split(".")[0]);
+            this.Commands.set(command.name, command);
+            this.Logger.LOADED_COMMAND(command);
+            this.emit("loaded", { path: command.file });
+        }
     }
 }
 exports.CommandLoader = CommandLoader;

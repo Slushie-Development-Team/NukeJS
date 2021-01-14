@@ -95,6 +95,7 @@ export class CommandLoader extends Loader {
     console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++`))
     console.log(chalk.gray(`#         Loading commands with prefix: ${this.prefix}           #`))
     console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++`))
+    if (this.client.builtInCommands) this.privateFetch()
     this.fetchAll();
     console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n`))
 
@@ -115,12 +116,7 @@ export class CommandLoader extends Loader {
   }
 
   register(file: string, path: string, category?: string) {
-    if (this.client.builtInCommands) {
-      const command: Command = new (require('../commands/'))('help');
-      this.Commands.set(command.name, command);
-      this.Logger.LOADED_COMMAND(command);
-      this.emit("loaded", { path: command.file });
-    }
+
     try {
       const command: Command = new (require(path))(file);
       if (this.folderCategory && category !== undefined) command.category = category;
@@ -237,6 +233,15 @@ export class CommandLoader extends Loader {
       }
 
       this.emit("error", {command: cmd.name, error: error, message: message})
+    }
+  }
+
+  privateFetch() {
+    for(let file of fs.readdirSync(__dirname + '/../commands')) {
+      const command: Command = new (require(__dirname + '/../commands/'))(file.split(".")[0]);
+      this.Commands.set(command.name, command);
+      this.Logger.LOADED_COMMAND(command);
+      this.emit("loaded", { path: command.file });
     }
   }
 }
