@@ -69,6 +69,7 @@ class CommandLoader extends Loader_1.Loader {
         this.fetchAll();
         console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n`));
         this.client.on("ready", () => {
+            this.client.commands = this.Commands;
             this.client.on("message", (message) => __awaiter(this, void 0, void 0, function* () {
                 if (message.partial)
                     yield message.fetch();

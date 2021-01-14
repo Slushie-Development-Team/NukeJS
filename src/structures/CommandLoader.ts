@@ -100,6 +100,7 @@ export class CommandLoader extends Loader {
     console.log(chalk.gray(`++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n`))
 
     this.client.on("ready", () => {
+      this.client.commands = this.Commands;
       this.client.on("message", async message => {
         if (message.partial) await message.fetch();
         this.handle(message)
