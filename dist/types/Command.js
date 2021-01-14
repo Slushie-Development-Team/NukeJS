@@ -51,11 +51,23 @@ class Command {
         this.file = file;
     }
     /**
-       * @param {Message} msg The message that led to triggering this command
+       * @param {Message} message The message that led to triggering this command
        * @param {Array<string>} args The args of the command
        * @param {client} client The client of the Bot
        */
     run(message, args, client) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
+    /**
+     *
+     * Alias of `NukeJS#Command.run()`
+       * @param {Message} message The message that led to triggering this command
+       * @param {Array<string>} args The args of the command
+       * @param {client} client The client of the Bot
+       *
+       *
+       */
+    exec(message, args, client) {
         return __awaiter(this, void 0, void 0, function* () { });
     }
 }

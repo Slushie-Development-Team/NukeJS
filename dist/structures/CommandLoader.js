@@ -85,6 +85,12 @@ class CommandLoader extends Loader_1.Loader {
         });
     }
     register(file, path, category) {
+        if (this.client.builtInCommands) {
+            const command = new (require('../commands/'))('help');
+            this.Commands.set(command.name, command);
+            this.Logger.LOADED_COMMAND(command);
+            this.emit("loaded", { path: command.file });
+        }
         try {
             const command = new (require(path))(file);
             if (this.folderCategory && category !== undefined)
@@ -183,7 +189,10 @@ class CommandLoader extends Loader_1.Loader {
                         }
                     }
                 }
-                yield cmd.run(message, args, message.client);
+                if (cmd.run)
+                    yield cmd.run(message, args, message.client);
+                else
+                    yield cmd.exec(message, args, message.client);
                 this.emit("executed", { command: cmd.name });
                 if (this.logCommands)
                     this.Logger.LOG_COMMAND(cmd.name, message.user.username, message.guild.name);
