@@ -27,7 +27,8 @@ declare module 'nukejs' {
         eventsFolder?: string,
         readyMessage?: string,
         owner?: string,
-        dev_ids?: Array<string>
+        dev_ids?: Array<string>,
+        builtInCommands?: boolean
     }
 
     interface CommandOptions {
@@ -42,8 +43,16 @@ declare module 'nukejs' {
         extendedHelp?: string,
         usage?: string,
         ignoredInhibitors: Array<string>,
-        category?: string
+        category?: string,
+        args?: Array<CommandArgs>
     }
+
+    interface CommandArgs {
+        name: string,
+        description?: string,
+        required?: boolean
+    }
+
     interface commandLoaderOptions {
         directory: string,
         prefix: string,

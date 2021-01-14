@@ -19,7 +19,7 @@
  *   along with NukeJS.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { BitFieldResolvable, PermissionString } from "discord.js";
+import { BitFieldResolvable, PermissionString, Message } from "discord.js";
 
 interface CommandOptions {
   enabled?: boolean,
@@ -78,9 +78,20 @@ export class Command {
   }
 
   /**
-     * @param {Message} msg The message that led to triggering this command
+     * @param {Message} message The message that led to triggering this command
      * @param {Array<string>} args The args of the command
      * @param {client} client The client of the Bot
      */
   async run(message, args, client) {}
+
+  /**
+   * 
+   * Alias of `NukeJS#Command.run()`
+     * @param {Message} message The message that led to triggering this command
+     * @param {Array<string>} args The args of the command
+     * @param {client} client The client of the Bot
+     * 
+     * 
+     */  
+  async exec(message, args, client) {}
 }

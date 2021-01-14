@@ -115,6 +115,12 @@ export class CommandLoader extends Loader {
   }
 
   register(file: string, path: string, category?: string) {
+    if (this.client.builtInCommands) {
+      const command: Command = new (require('../commands/'))('help');
+      this.Commands.set(command.name, command);
+      this.Logger.LOADED_COMMAND(command);
+      this.emit("loaded", { path: command.file });
+    }
     try {
       const command: Command = new (require(path))(file);
       if (this.folderCategory && category !== undefined) command.category = category;
@@ -205,7 +211,8 @@ export class CommandLoader extends Loader {
         }
       }
 
-      await cmd.run(message, args, message.client);
+      if(cmd.run) await cmd.run(message, args, message.client);
+      else await cmd.exec(message, args, message.client);
       this.emit("executed", { command: cmd.name })
       if (this.logCommands) this.Logger.LOG_COMMAND(cmd.name, message.user.username, message.guild.name);
       if (cmd.cooldown > 0) {

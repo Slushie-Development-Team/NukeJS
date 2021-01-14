@@ -34,7 +34,8 @@ interface NukeClientOptions {
   readyMessage?: string,
   errorLog?: string,
   owner?: string,
-  dev_ids?: Array<string>
+  dev_ids?: Array<string>,
+  builtInCommands?: boolean
 }
 
 export class Client extends discord.Client {
@@ -44,6 +45,7 @@ export class Client extends discord.Client {
   public readyMessage: string;
   public owner: string;
   public dev_ids: string[];
+  public builtInCommands: boolean
   public InhibitorStore: discord.Collection<string, Inhibitor> = new discord.Collection<string, Inhibitor>();
 
   public commands: discord.Collection<string, object> = new discord.Collection();
