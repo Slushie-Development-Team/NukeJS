@@ -19,10 +19,10 @@
  *   along with NukeJS.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const Command = require("../types/Command");
-const { MessageEmbed } = require("discord.js");
+import { Command } from "../types/Command";
+import { MessageEmbed } from "discord.js";
 
-module.exports = class Help extends Command {
+export class Help extends Command {
     constructor() {
         super('help', {
             name: "help",
@@ -41,7 +41,7 @@ module.exports = class Help extends Command {
             .setTitle("Commands")
             .setColor(process.env.COLOR || "RANDOM");
 
-        let commands = Array.from(client.commands.values());
+        let commands: Array<Command> = Array.from(client.commands.values());
         for(let command of commands.slice(0, 20)) {
             embed.addField(command.name, `\`${command.description}\`\nUsage: ${client.prefix}${command.usage || command.name}`)
         }

@@ -237,8 +237,8 @@ export class CommandLoader extends Loader {
   }
 
   privateFetch() {
-    for(let file of fs.readdirSync(__dirname + '/../commands')) {
-      const command: Command = new (require(__dirname + '/../commands/'))(file.split(".")[0]);
+    for(let file of fs.readdirSync(process.cwd() + '/node_modules/nukejs/dist/commands/')) {
+      const command: Command = new (require(process.cwd() + '/node_modules/nukejs/dist/commands/' + file))(file.split(".")[0]);
       this.Commands.set(command.name, command);
       this.Logger.LOADED_COMMAND(command);
       this.emit("loaded", { path: command.file });
