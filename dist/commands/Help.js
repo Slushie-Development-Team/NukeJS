@@ -61,7 +61,7 @@ class Help extends Command_1.Command {
             catch (error) {
                 throw error;
             }
-            let minimumCommands = 0;
+            let minimumCommands = 6;
             msg.createReactionCollector((reaction, user) => user.id === message.author.id && ["◀️", "▶️"].includes(reaction.emoji.name))
                 .on("collect", (reaction, user) => __awaiter(this, void 0, void 0, function* () {
                 try {
@@ -69,7 +69,7 @@ class Help extends Command_1.Command {
                 }
                 catch (_a) { }
                 if (reaction.emoji.name === "▶️") {
-                    let cmds = commands.slice(minimumCommands + 6, minimumCommands + 12);
+                    let cmds = commands.slice(minimumCommands, minimumCommands + 6);
                     if (!cmds[0])
                         return;
                     minimumCommands += 6;
@@ -81,7 +81,7 @@ class Help extends Command_1.Command {
                 }
                 ;
                 if (reaction.emoji.name === "◀️") {
-                    let cmds = commands.slice(minimumCommands - 6, minimumCommands - 12);
+                    let cmds = commands.slice(minimumCommands - 6, minimumCommands);
                     if (!cmds[0])
                         return;
                     minimumCommands -= 6;

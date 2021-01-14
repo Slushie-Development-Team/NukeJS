@@ -49,14 +49,14 @@ export class Help extends Command {
         if(commands.length <= 6) return;
 
         try { Promise.all<MessageReaction>([msg.react('◀️'), msg.react('▶️')]) } catch (error) { throw error; }
-        let minimumCommands = 0;
+        let minimumCommands = 6;
         msg.createReactionCollector((reaction, user) => user.id === message.author.id && ["◀️", "▶️"].includes(reaction.emoji.name))
         .on("collect", async (reaction, user) => {
             try {
                 await reaction.users.remove(user)
             } catch { }
             if (reaction.emoji.name === "▶️") {
-                let cmds: Array<Command> = commands.slice(minimumCommands + 6, minimumCommands + 12);
+                let cmds: Array<Command> = commands.slice(minimumCommands, minimumCommands + 6);
                 if (!cmds[0]) return;
 
                 minimumCommands += 6;
@@ -70,7 +70,7 @@ export class Help extends Command {
             };
 
             if (reaction.emoji.name === "◀️") {
-                let cmds: Array<Command> = commands.slice(minimumCommands - 6, minimumCommands - 12);
+                let cmds: Array<Command> = commands.slice(minimumCommands - 6, minimumCommands);
                 if (!cmds[0]) return;
 
                 minimumCommands -= 6;
