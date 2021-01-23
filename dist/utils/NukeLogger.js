@@ -19,7 +19,7 @@ class NukeLogger {
         console.log(`${messagePrefix} Command ${chalk.blueBright(commandName)} has been run by ${userName} in ${guildName}`);
     }
     LOADED_EVENT(eventFile) {
-        console.log(`${messagePrefix} Loaded Eventt ${chalk.greenBright(eventFile)}`);
+        console.log(`${messagePrefix} Loaded Event ${chalk.greenBright(eventFile)}`);
     }
     LOADED_INHIBITOR(inhibitor) {
         console.log(`${messagePrefix} Loaded Inhibitor ${chalk.greenBright(inhibitor)}`);
